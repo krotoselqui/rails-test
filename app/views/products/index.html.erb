@@ -1,10 +1,15 @@
 <h1>Products#index</h1>
 <p>Find me in app/views/products/index.html.erb</p>
-<%= Rails.root.join("config/key/railsconnect-28398-firebase-adminsdk-fbsvc-defc38d3bb.json").to_s %>
+
+<%= link_to "New Product", new_product_path %>
+
 <div id="products">
     <% @products.each do |product| %>
         <div>
-            <%= product.name %>
+            <a href="/products/<%= product.id %>">
+                <%= product.name %>
+            </a>
+            <%= link_to product.name, product %>
         </div>
     <% end %>
 <%= debug @products %>
