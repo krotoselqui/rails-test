@@ -2,9 +2,13 @@ class FirestoreController < ApplicationController
   rescue_from FirestoreService::FirestoreError, with: :handle_firestore_error
 
   def index
-    collection_name = params[:collection] || "users"  # デフォルトは "users"
-    data = FirestoreService.get_collection(collection_name)
-    render json: { data: data }
+    collection_name = params[:collection] || "users" 
+    @firestoredata = FirestoreService.get_collection(collection_name)
+  end
+
+  def new
+    collection_name = params[:collection] || "users"
+    @firestoredata = {} 
   end
 
   def show
@@ -18,6 +22,16 @@ class FirestoreController < ApplicationController
       render json: { error: "Document not found" }, status: :not_found
     end
   end
+
+  def create
+    collection_name = params[:collection] || "users"
+    data = params.require(:data).permit!.to_h
+
+    created_doc = FirestoreService.create_document(collection_name, data)
+    render json: { data: created_doc }, status: :created
+  end
+
+
 
   private
 

@@ -1,0 +1,11 @@
+<h1>Firestore#index</h1>
+
+
+
+<div id="products">
+    <% @firestoredata.each do |d| %>
+        <div>
+            <%= link_to d["name"], firestoredata_path(d["id"]) %>
+        </div>
+    <% end %>
+<%= debug @firestoredata %>

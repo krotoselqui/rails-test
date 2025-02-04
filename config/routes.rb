@@ -29,9 +29,10 @@ Rails.application.routes.draw do
 
   # delete "/products/:id", to: "products#destroy"
 
-  root "products#index"
+  # root "products#index"
+  root "firestore#index"
 
-  get '/firestore', to: 'firestore#index'  # コレクションの取得
+  resources :firestoredata, controller: 'firestore'
   get '/firestore/:collection/:id', to: 'firestore#show'  # ドキュメントの取得
 
 end
