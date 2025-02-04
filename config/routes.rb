@@ -31,5 +31,7 @@ Rails.application.routes.draw do
 
   root "products#index"
 
+  get '/firestore', to: 'firestore#index'  # コレクションの取得
+  get '/firestore/:collection/:id', to: 'firestore#show'  # ドキュメントの取得
 
 end
