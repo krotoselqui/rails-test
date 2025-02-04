@@ -22,7 +22,7 @@ class ProductsController < ApplicationController
 
   private
     def product_params
-      params.expect(product: [ :name ])
+      params.require(:product).permit(:name)
     end
 
 end

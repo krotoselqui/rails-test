@@ -13,3 +13,15 @@
     </p>
   <% end %>
 </div>
+
+<% if @product.errors.any? %>
+  <div style="color: red;">
+    <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+    <ul>
+      <% @product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
