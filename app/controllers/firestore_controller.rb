@@ -17,9 +17,9 @@ class FirestoreController < ApplicationController
     data = FirestoreService.get_document(collection_name, document_id)
 
     if data
-      render json: { data: data }
+      @firestoredata = data
     else
-      render json: { error: "Document not found" }, status: :not_found
+      redirect_to firestoredata_index_path, alert: "Document not found"
     end
   end
 
@@ -27,10 +27,15 @@ class FirestoreController < ApplicationController
     collection_name = params[:collection] || "users"
     data = params.require(:data).permit!.to_h
 
-    created_doc = FirestoreService.create_document(collection_name, data)
-    render json: { data: created_doc }, status: :created
+    begin
+      created_doc = FirestoreService.create_document(collection_name, data)
+      redirect_to firestore_index_path, notice: 'データが正常に保存されました'
+    rescue => e
+      flash.now[:alert] = "データの保存に失敗しました: #{e.message}"
+      @firestoredata = data
+      render :new, status: :unprocessable_entity
+    end
   end
-
 
 
   private
