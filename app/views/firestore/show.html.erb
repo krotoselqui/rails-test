@@ -1,12 +1,17 @@
-<h1>User Details</h1>
+<h1>Memo Details</h1>
 
-<div class="user-details">
+<div>
   <p>
     <strong>Name:</strong>
-    <%= @firestoredata["name"] %>
+    <%= @firestoredata[:name] %>
+  </p>
+
+  <p>
+    <strong>Document ID:</strong>
+    <%= @firestoredata[:id] %>
   </p>
 </div>
 
-<div class="actions">
-  <%= link_to "Back to List", firestoredata_index_path %>
+<div>
+  <%= link_to "Back to List", firestore_index_path %>
 </div>

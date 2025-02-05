@@ -1,11 +1,16 @@
-<h1>Firestore#index</h1>
+<h1>Memos List</h1>
+<p><%= link_to "New Memo", firestore_new_path %></p>
 
-
-
-<div id="products">
-    <% @firestoredata.each do |data| %>
-        <div>
-            <%= link_to data["name"], "/firestore/users/#{data[:id]}" %>
-        </div>
-    <% end %>
-<%= debug @firestoredata %>
+<div id="memos">
+  <% if @firestoredata.any? %>
+    <ul>
+      <% @firestoredata.each do |data| %>
+        <li>
+          <%= link_to data[:name], firestore_show_path("memos", data[:id]) %>
+          <span>(ID: <%= data[:id] %>)</span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>no memo</p>
+  <% end %>
