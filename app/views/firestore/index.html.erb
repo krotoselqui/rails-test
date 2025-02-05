@@ -3,14 +3,20 @@
 
 <div id="memos">
   <% if @firestoredata.any? %>
-    <ul>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th></th>
+      </tr>
       <% @firestoredata.each do |data| %>
-        <li>
-          <%= link_to data[:name], firestore_show_path("memos", data[:id]) %>
-          <span>(ID: <%= data[:id] %>)</span>
-        </li>
+        <tr>
+          <td><%= data[:title] %></td>
+          <td>
+            <%= link_to "Show", firestore_show_path("memos", data[:id]) %>
+          </td>
+        </tr>
       <% end %>
-    </ul>
+    </table>
   <% else %>
     <p>no memo</p>
   <% end %>

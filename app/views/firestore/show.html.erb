@@ -2,21 +2,29 @@
 
 <div>
   <p>
-    <strong>Name:</strong>
-    <%= @firestoredata[:name] %>
+    <strong>Title:</strong>
+    <%= @firestoredata[:title] %>
   </p>
 
   <p>
-    <strong>Document ID:</strong>
-    <%= @firestoredata[:id] %>
+    <strong>Type:</strong>
+    <%= @firestoredata[:type] %>
+  </p>
+
+  <p>
+    <strong>Content:</strong>
+    <%= @firestoredata[:content] %>
+  </p>
+
+  <p>
+    <small>Document ID: <%= @firestoredata[:id] %></small>
   </p>
 </div>
 
-<div class="actions">
-  <%= link_to "Back to List", firestore_index_path, class: "btn btn-secondary" %>
+<div>
+  <%= link_to "Back to List", firestore_index_path %>
   <%= button_to "Delete Memo",
                 firestore_destroy_path(collection: params[:collection], id: @firestoredata[:id]),
                 method: :delete,
-                class: "btn btn-danger",
                 data: { confirm: "本当に削除しますか？" } %>
 </div>

@@ -1,22 +1,34 @@
-<div class="container mt-4">
+<div>
   <% flash.each do |name, msg| %>
-    <div class="alert <%= name == 'notice' ? 'alert-success' : 'alert-danger' %> alert-dismissible fade show" role="alert">
+    <div>
       <%= msg %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   <% end %>
 
   <h1>New Data</h1>
 
-  <%= form_with(url: firestore_create_path, local: true, class: 'mt-4') do |f| %>
-    <div class="mb-3">
-      <%= f.label :name, 'Name', class: 'form-label' %>
-      <%= f.text_field 'data[name]', class: 'form-control', required: true %>
+  <%= form_with(url: firestore_create_path, local: true) do |f| %>
+    <div>
+      <%= f.label :title, 'Title' %>
+      <br>
+      <%= f.text_field 'data[title]', required: true %>
     </div>
 
-    <div class="mt-4">
-      <%= f.submit 'Submit', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', firestore_index_path, class: 'btn btn-secondary ms-2' %>
+    <div>
+      <%= f.label :type, 'Type' %>
+      <br>
+      <%= f.number_field 'data[type]', required: true %>
+    </div>
+
+    <div>
+      <%= f.label :content, 'Content' %>
+      <br>
+      <%= f.text_area 'data[content]', required: true %>
+    </div>
+
+    <div>
+      <%= f.submit 'Submit' %>
+      <%= link_to 'Cancel', firestore_index_path %>
     </div>
   <% end %>
 </div>
