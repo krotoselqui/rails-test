@@ -23,6 +23,7 @@
 
 <div>
   <%= link_to "Back to List", firestore_index_path %>
+  <%= link_to "Edit Memo", firestore_edit_path(collection: params[:collection], id: @firestoredata[:id]) %>
   <%= button_to "Delete Memo",
                 firestore_destroy_path(collection: params[:collection], id: @firestoredata[:id]),
                 method: :delete,

@@ -1,0 +1,37 @@
+<div>
+  <% flash.each do |name, msg| %>
+    <div>
+      <%= msg %>
+    </div>
+  <% end %>
+
+  <h1>Edit Memo</h1>
+
+  <%= form_with(url: firestore_update_path(collection: params[:collection], id: @firestoredata[:id]), method: :patch, local: true) do |f| %>
+    <div>
+      <%= f.label :title, 'Title' %>
+      <br>
+      <%= f.text_field 'data[title]', value: @firestoredata[:title], required: true %>
+    </div>
+
+    <div>
+      <%= f.label :type, 'Type' %>
+      <br>
+      <%= f.number_field 'data[type]', value: @firestoredata[:type], required: true %>
+    </div>
+
+    <div>
+      <%= f.label :content, 'Content' %>
+      <br>
+      <%= f.text_area 'data[content]', value: @firestoredata[:content], required: true %>
+    </div>
+
+    <div>
+      <%= f.submit 'Update' %>
+      <%= link_to 'Cancel', firestore_show_path(collection: params[:collection], id: @firestoredata[:id]) %>
+    </div>
+  <% end %>
+</div>
+
+
+<%= link_to "Back", firestore_index_path %>

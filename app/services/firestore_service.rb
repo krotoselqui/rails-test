@@ -52,4 +52,16 @@ class FirestoreService
       raise FirestoreError, "Failed to create document: #{e.message}"
     end
   end
+
+  def self.update_document(collection_name, document_id, data)
+    begin
+      doc_ref = FirestoreClient.col(collection_name).doc(document_id)
+      doc_ref.set(data)
+      { id: document_id }.merge(data)
+    rescue Google::Cloud::Error => e
+      Rails.logger.error "Firestore update error: #{e.message} for #{collection_name}/#{document_id}"
+      Rails.logger.error e.backtrace.join("\n")
+      raise FirestoreError, "Failed to update document: #{e.message}"
+    end
+  end
 end

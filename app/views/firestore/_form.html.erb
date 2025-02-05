@@ -1,0 +1,24 @@
+  <%= form_with(url: firestore_create_path, local: true) do |f| %>
+    <div>
+      <%= f.label :title, 'Title' %>
+      <br>
+      <%= f.text_field 'data[title]', required: true %>
+    </div>
+
+    <div>
+      <%= f.label :type, 'Type' %>
+      <br>
+      <%= f.number_field 'data[type]', required: true %>
+    </div>
+
+    <div>
+      <%= f.label :content, 'Content' %>
+      <br>
+      <%= f.text_area 'data[content]', required: true %>
+    </div>
+
+    <div>
+      <%= f.submit 'Submit' %>
+      <%= link_to 'Cancel', firestore_index_path %>
+    </div>
+  <% end %>

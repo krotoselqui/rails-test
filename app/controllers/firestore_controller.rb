@@ -11,6 +11,18 @@ class FirestoreController < ApplicationController
     @firestoredata = {}
   end
 
+  def edit
+    collection_name = params[:collection] || "memos"
+    document_id = params[:id]
+    data = FirestoreService.get_document(collection_name, document_id)
+
+    if data
+      @firestoredata = data
+    else
+      redirect_to firestoredata_index_path, alert: "Document not found"
+    end
+  end
+
   def show
     collection_name = params[:collection] || "memos"
     document_id = params[:id]
@@ -34,6 +46,21 @@ class FirestoreController < ApplicationController
       flash.now[:alert] = "データの保存に失敗しました: #{e.message}"
       @firestoredata = data
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    collection_name = params[:collection] || "memos"
+    document_id = params[:id]
+    data = params.require(:data).permit!.to_h
+
+    begin
+      updated_doc = FirestoreService.update_document(collection_name, document_id, data)
+      redirect_to firestore_show_path(collection: collection_name, id: document_id), notice: 'メモが正常に更新されました'
+    rescue => e
+      flash.now[:alert] = "メモの更新に失敗しました: #{e.message}"
+      @firestoredata = data.merge(id: document_id)
+      render :edit, status: :unprocessable_entity
     end
   end
 
