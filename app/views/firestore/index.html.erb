@@ -5,7 +5,7 @@
 <div id="products">
     <% @firestoredata.each do |data| %>
         <div>
-            <%= link_to data["name"], "/firestore/users/#{data['id']}" %>
+            <%= link_to data["name"], "/firestore/users/#{data[:id]}" %>
         </div>
     <% end %>
 <%= debug @firestoredata %>

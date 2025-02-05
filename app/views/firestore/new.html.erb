@@ -14,11 +14,6 @@
       <%= f.text_field 'data[name]', class: 'form-control', required: true %>
     </div>
 
-    <div class="mb-3">
-      <%= f.label :id, 'ID', class: 'form-label' %>
-      <%= f.text_field 'data[id]', class: 'form-control', required: true %>
-    </div>
-
     <div class="mt-4">
       <%= f.submit 'Submit', class: 'btn btn-primary' %>
       <%= link_to 'Cancel', firestore_index_path, class: 'btn btn-secondary ms-2' %>
