@@ -31,10 +31,11 @@ Rails.application.routes.draw do
 
   # root "products#index"
   root "firestore#index"
+get '/firestore', to: 'firestore#index', as: :firestore_index  # 一覧表示
+get '/firestore/new', to: 'firestore#new', as: :firestore_new  # 新規作成フォーム
+post '/firestore/create', to: 'firestore#create', as: :firestore_create  # データ作成
+get '/firestore/:collection/:id', to: 'firestore#show', as: :firestore_show  # ドキュメントの取得
+delete '/firestore/:collection/:id', to: 'firestore#destroy', as: :firestore_destroy  # ドキュメントの削除
 
-  get '/firestore', to: 'firestore#index', as: :firestore_index  # 一覧表示
-  get '/firestore/new', to: 'firestore#new', as: :firestore_new  # 新規作成フォーム
-  post '/firestore/create', to: 'firestore#create', as: :firestore_create  # データ作成
-  get '/firestore/:collection/:id', to: 'firestore#show', as: :firestore_show  # ドキュメントの取得
 
 end

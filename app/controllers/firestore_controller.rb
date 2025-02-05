@@ -37,6 +37,18 @@ class FirestoreController < ApplicationController
     end
   end
 
+  def destroy
+    collection_name = params[:collection] || "memos"
+    document_id = params[:id]
+
+    begin
+      FirestoreService.delete_document(collection_name, document_id)
+      redirect_to firestore_index_path, notice: 'メモが正常に削除されました'
+    rescue => e
+      flash[:alert] = "メモの削除に失敗しました: #{e.message}"
+      redirect_to firestore_show_path(collection: collection_name, id: document_id)
+    end
+  end
 
   private
 

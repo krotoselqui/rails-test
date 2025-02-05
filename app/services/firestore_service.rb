@@ -1,6 +1,18 @@
 class FirestoreService
   class FirestoreError < StandardError; end
 
+  def self.delete_document(collection_name, document_id)
+    begin
+      doc_ref = FirestoreClient.col(collection_name).doc(document_id)
+      doc_ref.delete
+      true
+    rescue Google::Cloud::Error => e
+      Rails.logger.error "Firestore delete error: #{e.message} for #{collection_name}/#{document_id}"
+      Rails.logger.error e.backtrace.join("\n")
+      raise FirestoreError, "Failed to delete document: #{e.message}"
+    end
+  end
+
   def self.get_collection(collection_name)
     begin
       collection = FirestoreClient.col(collection_name)
