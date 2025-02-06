@@ -63,3 +63,5 @@ group :test do
 end
 
 gem "google-cloud-firestore"
+
+gem "dotenv-rails", "~> 3.1"
