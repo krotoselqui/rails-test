@@ -21,7 +21,7 @@ proxy:
   # ssl: true
   # host: app.example.com
   ssl: false
-  host: app.example.com
+  host: 133.242.236.103
 
 # Credentials for your image host.
 registry:
@@ -95,6 +95,7 @@ builder:
 # Use a different ssh user than root
 ssh:
   user: deploy
+  port: 23
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:
