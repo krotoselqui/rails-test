@@ -16,8 +16,13 @@ class FirestoreService
   def self.get_collection(collection_name)
     begin
       collection = FirestoreClient.col(collection_name)
-      documents = collection.get
-      documents.map { |doc| doc.data.merge(id: doc.document_id) }
+      documents = collection.order(:created_at, :asc).get
+      documents.map do |doc|
+        data = doc.data
+        # created_atが存在しない場合は過去の固定値を設定
+        data[:created_at] ||= Time.new(2000, 1, 1).to_i
+        data.merge(id: doc.document_id)
+      end
     rescue Google::Cloud::Error => e
       Rails.logger.error "Firestore collection error: #{e.message} for collection: #{collection_name}"
       Rails.logger.error e.backtrace.join("\n")
@@ -44,8 +49,9 @@ class FirestoreService
 
   def self.create_document(collection_name, data)
     begin
-      doc_ref = FirestoreClient.col(collection_name).add(data)
-      { id: doc_ref.document_id }.merge(data)
+      data_with_timestamp = data.merge(created_at: Time.current.to_i)
+      doc_ref = FirestoreClient.col(collection_name).add(data_with_timestamp)
+      { id: doc_ref.document_id }.merge(data_with_timestamp)
     rescue Google::Cloud::Error => e
       Rails.logger.error "Firestore create error: #{e.message} for collection: #{collection_name}"
       Rails.logger.error e.backtrace.join("\n")
@@ -56,8 +62,12 @@ class FirestoreService
   def self.update_document(collection_name, document_id, data)
     begin
       doc_ref = FirestoreClient.col(collection_name).doc(document_id)
-      doc_ref.set(data)
-      { id: document_id }.merge(data)
+      existing_doc = doc_ref.get
+      existing_data = existing_doc.exists? ? existing_doc.data : {}
+      # 既存のcreated_atを保持
+      update_data = data.merge(created_at: existing_data[:created_at]) if existing_data[:created_at]
+      doc_ref.set(update_data || data)
+      { id: document_id }.merge(update_data || data)
     rescue Google::Cloud::Error => e
       Rails.logger.error "Firestore update error: #{e.message} for #{collection_name}/#{document_id}"
       Rails.logger.error e.backtrace.join("\n")
