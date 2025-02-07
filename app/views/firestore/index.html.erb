@@ -1,22 +1,63 @@
-<h1>Memos List</h1>
-<p><%= link_to "New Memo", firestore_new_path %></p>
+<div class="min-h-screen bg-gray-50 py-6">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <h1 class="text-xl font-semibold text-gray-900 mb-4 sm:mb-0">メモ一覧</h1>
+      <%= link_to "新規メモ",
+          firestore_new_path, 
+          class: "inline-flex items-center px-3 py-2 border border-transparent text-sm rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    </div>
 
-<div id="memos">
-  <% if @firestoredata.any? %>
-    <table>
-      <tr>
-        <th>Title</th>
-        <th></th>
-      </tr>
-      <% @firestoredata.each do |data| %>
-        <tr>
-          <td><%= data[:title] %></td>
-          <td>
-            <%= link_to "Show", firestore_show_path("memos", data[:id]) %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  <% else %>
-    <p>no memo</p>
-  <% end %>
+    <div class="mt-6">
+      <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+        <% if @firestoredata.any? %>
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="w-4/5 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  タイトル
+                </th>
+                <th scope="col" class="w-1/5 px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  アクション
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @firestoredata.each_with_index do |data, index| %>
+                <tr class="<%= index.even? ? 'bg-white' : 'bg-gray-50' %> hover:bg-gray-100 transition-colors duration-150">
+                  <td class="px-4 py-3 text-sm text-gray-900">
+                    <%= data[:title] %>
+                  </td>
+                  <td class="px-4 py-3 text-right text-sm font-medium whitespace-nowrap">
+                    <div class="flex justify-end space-x-3">
+                      <%= link_to "詳細", 
+                          firestore_show_path("memos", data[:id]), 
+                          class: "text-indigo-600 hover:text-indigo-900" %>
+                      <%= link_to "編集", 
+                          firestore_edit_path("memos", data[:id]), 
+                          class: "text-green-600 hover:text-green-900" %>
+                      <%= button_to "削除", 
+                          firestore_destroy_path("memos", data[:id]), 
+                          method: :delete, 
+                          class: "text-red-600 hover:text-red-900",
+                          form: { class: "inline" },
+                          data: { confirm: "本当に削除しますか？" } %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="text-center py-8 bg-white">
+            <p class="text-sm text-gray-500">メモがありません</p>
+            <p class="mt-2">
+              <%= link_to "最初のメモを作成する", 
+                  firestore_new_path, 
+                  class: "text-indigo-600 hover:text-indigo-900" %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
