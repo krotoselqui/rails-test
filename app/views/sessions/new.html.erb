@@ -1,0 +1,65 @@
+<div class="login-container">
+  <h2>ログイン</h2>
+
+  <%= form_with(url: login_path, local: true) do |f| %>
+    <div class="form-group">
+      <%= f.label :email, 'メールアドレス' %>
+      <%= f.email_field :email, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, 'パスワード' %>
+      <%= f.password_field :password, class: 'form-control' %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit 'ログイン', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.actions {
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+</style>
