@@ -16,6 +16,10 @@
       <%= f.submit 'ログイン', class: 'btn btn-primary' %>
     </div>
   <% end %>
+
+  <div class="signup-link">
+    アカウントをお持ちでない方は <%= link_to 'こちら', signup_path %>
+  </div>
 </div>
 
 <style>
@@ -61,5 +65,19 @@
 
 .btn-primary:hover {
   background-color: #0056b3;
+}
+
+.signup-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
 }
 </style>

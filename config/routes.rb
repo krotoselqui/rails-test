@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy', as: :logout
 
+  # ユーザー登録用のルート
+  get '/signup', to: 'users#new', as: :signup
+  post '/users', to: 'users#create'
+
   # productsに関してCRUDアクションを定義する
   resources :products
 

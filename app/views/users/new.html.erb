@@ -1,0 +1,137 @@
+<div class="signup-container">
+  <h2>アカウント作成</h2>
+
+  <% if flash[:alert] %>
+    <div class="error-messages">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <%= form_with(model: @user, local: true) do |f| %>
+    <% if @user.errors.any? %>
+      <div class="error-messages">
+        <h3><%= pluralize(@user.errors.count, "error") %> が発生しました：</h3>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :email, 'メールアドレス' %>
+      <%= f.email_field :email, class: 'form-control', required: true %>
+      <% if @user.errors[:email].any? %>
+        <span class="field-error"><%= @user.errors[:email].join(', ') %></span>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, 'パスワード' %>
+      <%= f.password_field :password, class: 'form-control', required: true %>
+      <% if @user.errors[:password].any? %>
+        <span class="field-error"><%= @user.errors[:password].join(', ') %></span>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation, 'パスワード（確認）' %>
+      <%= f.password_field :password_confirmation, class: 'form-control', required: true %>
+      <% if @user.errors[:password_confirmation].any? %>
+        <span class="field-error"><%= @user.errors[:password_confirmation].join(', ') %></span>
+      <% end %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit '登録', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+
+  <div class="login-link">
+    すでにアカウントをお持ちの方は <%= link_to 'こちら', login_path %>
+  </div>
+</div>
+
+<style>
+.signup-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.error-messages {
+  color: #dc3545;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  background-color: #f8d7da;
+}
+
+.field-error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.actions {
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.login-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+</style>
