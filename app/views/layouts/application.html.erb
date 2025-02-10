@@ -17,12 +17,45 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-gray-50">
+    <header class="bg-slate-800 text-white shadow-md mb-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex justify-between items-center">
+          <div class="flex-shrink-0">
+            <%= link_to 'Mywebapp', root_path, class: 'text-xl font-bold hover:text-gray-200' %>
+          </div>
+          <div class="flex items-center space-x-4">
+            <% if user_signed_in? %>
+              <span class="text-gray-300"><%= current_user.email %></span>
+              <%= button_to 'ログアウト', 
+                          logout_path, 
+                          method: :delete, 
+                          class: 'bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out' %>
+            <% else %>
+              <%= link_to 'ログイン', 
+                         login_path, 
+                         class: 'bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <% flash.each do |name, msg| %>
+        <div class="<%= name == 'notice' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700' %> border px-4 py-3 rounded relative mb-4" role="alert">
+          <span class="block sm:inline"><%= msg %></span>
+        </div>
+      <% end %>
+
+      <main class="container mx-auto">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

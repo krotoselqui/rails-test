@@ -1,5 +1,6 @@
 class FirestoreController < ApplicationController
   rescue_from FirestoreService::FirestoreError, with: :handle_firestore_error
+  before_action :log_authentication_status
 
   def index
     collection_name = params[:collection] || "memos"
@@ -82,5 +83,12 @@ class FirestoreController < ApplicationController
   def handle_firestore_error(error)
     Rails.logger.error "Firestore operation failed: #{error.message}"
     render json: { error: error.message }, status: :internal_server_error
+  end
+
+  def log_authentication_status
+    Rails.logger.debug "Authentication Status:"
+    Rails.logger.debug "  Session user_id: #{session[:user_id]}"
+    Rails.logger.debug "  Current user: #{current_user&.email}"
+    Rails.logger.debug "  Signed in?: #{user_signed_in?}"
   end
 end
