@@ -16,7 +16,7 @@ class FirestoreService
   def self.get_collection(collection_name)
     begin
       collection = FirestoreClient.col(collection_name)
-      documents = collection.order(:created_at, :asc).get
+      documents = collection.order(:created_at, :desc).get
       documents.map do |doc|
         data = doc.data
         # created_atが存在しない場合は過去の固定値を設定
