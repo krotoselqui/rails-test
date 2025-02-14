@@ -1,24 +1,24 @@
-  <%= form_with(url: firestore_create_path, local: true) do |f| %>
-    <div>
-      <%= f.label :title, 'Title' %>
-      <br>
-      <%= f.text_field 'data[title]', required: true %>
-    </div>
+<% form_url = @firestoredata ? firestore_update_path(collection: params[:collection], id: @firestoredata[:id]) : firestore_create_path %>
+<% form_method = @firestoredata ? :patch : :post %>
 
-    <div>
-      <%= f.label :type, 'Type' %>
-      <br>
-      <%= f.number_field 'data[type]', required: true %>
-    </div>
+<%= form_with(url: form_url, method: form_method, local: true, class: 'space-y-6 max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md') do |f| %>
+  <div class="space-y-2">
+    <%= f.label :title, 'タイトル', class: 'block text-sm font-medium text-gray-700' %>
+    <%= f.text_field 'data[title]', value: @firestoredata&.dig(:title), required: true, class: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500' %>
+  </div>
 
-    <div>
-      <%= f.label :content, 'Content' %>
-      <br>
-      <%= f.text_area 'data[content]', required: true %>
-    </div>
+  <div class="space-y-2">
+    <%= f.label :type, 'タイプ', class: 'block text-sm font-medium text-gray-700' %>
+    <%= f.number_field 'data[type]', value: @firestoredata&.dig(:type) || 0, required: true, class: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500' %>
+  </div>
 
-    <div>
-      <%= f.submit 'Submit' %>
-      <%= link_to 'Cancel', firestore_index_path %>
-    </div>
-  <% end %>
+  <div class="space-y-2">
+    <%= f.label :content, '内容', class: 'block text-sm font-medium text-gray-700' %>
+    <%= f.text_area 'data[content]', value: @firestoredata&.dig(:content), required: true, rows: 4, class: 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 whitespace-pre-wrap', style: 'white-space: pre-wrap;' %>
+  </div>
+
+  <div class="flex items-center justify-start space-x-4 mt-4">
+    <%= f.submit @firestoredata ? '更新' : '保存', class: 'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' %>
+    <%= link_to 'キャンセル', @firestoredata ? firestore_show_path(collection: params[:collection], id: @firestoredata[:id]) : firestore_index_path, class: 'inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' %>
+  </div>
+<% end %>

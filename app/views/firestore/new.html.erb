@@ -1,34 +1,11 @@
-<div>
+<div class="max-w-2xl mx-auto p-6">
   <% flash.each do |name, msg| %>
-    <div>
+    <div class="mb-4 p-4 rounded-lg bg-yellow-100 text-yellow-700">
       <%= msg %>
     </div>
   <% end %>
 
-  <h1>New Data</h1>
+  <h1 class="text-2xl font-bold mb-6">新規メモ作成</h1>
 
-  <%= form_with(url: firestore_create_path, local: true) do |f| %>
-    <div>
-      <%= f.label :title, 'Title' %>
-      <br>
-      <%= f.text_field 'data[title]', required: true %>
-    </div>
-
-    <div>
-      <%= f.label :type, 'Type' %>
-      <br>
-      <%= f.number_field 'data[type]', required: true %>
-    </div>
-
-    <div>
-      <%= f.label :content, 'Content' %>
-      <br>
-      <%= f.text_area 'data[content]', required: true %>
-    </div>
-
-    <div>
-      <%= f.submit 'Submit' %>
-      <%= link_to 'Cancel', firestore_index_path %>
-    </div>
-  <% end %>
+  <%= render 'form' %>
 </div>
