@@ -74,5 +74,14 @@ Rails.application.configure do
   config.action_controller.allow_forgery_protection = false
   
   # Configure host and protocol for development
-  config.action_controller.default_url_options = { host: '133.242.236.103', protocol: 'http' }
+  config.action_controller.default_url_options = { host: 'aquaridz.com', protocol: 'https' }
+
+  # Enable DNS rebinding protection and other `Host` header attacks
+  config.hosts = [
+    "aquaridz.com",     # メインドメイン
+    /.*\.aquaridz\.com/, # サブドメインも許可
+    "133.242.236.103",  # 本番環境のIPアドレス
+    "localhost",        # ローカル開発用
+    "127.0.0.1"        # ローカル開発用
+  ]
 end

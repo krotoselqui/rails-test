@@ -4,22 +4,30 @@
 # See the Securing Rails Applications Guide for more information:
 # https://guides.rubyonrails.org/security.html#content-security-policy-header
 
-# Rails.application.configure do
-#   config.content_security_policy do |policy|
-#     policy.default_src :self, :https
-#     policy.font_src    :self, :https, :data
-#     policy.img_src     :self, :https, :data
-#     policy.object_src  :none
-#     policy.script_src  :self, :https
-#     policy.style_src   :self, :https
-#     # Specify URI for violation reports
-#     # policy.report_uri "/csp-violation-report-endpoint"
-#   end
-#
-#   # Generate session nonces for permitted importmap, inline scripts, and inline styles.
-#   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-#   config.content_security_policy_nonce_directives = %w(script-src style-src)
-#
-#   # Report violations without enforcing the policy.
-#   # config.content_security_policy_report_only = true
-# end
+Rails.application.configure do
+  config.content_security_policy do |policy|
+    asset_host = "https://aquaridz.com"
+    
+    policy.default_src :self, asset_host
+    policy.font_src    :self, asset_host, :data
+    policy.img_src     :self, asset_host, :data
+    policy.object_src  :none
+    policy.script_src  :self, asset_host, :unsafe_eval
+    policy.style_src   :self, asset_host, :unsafe_inline
+    policy.connect_src :self, asset_host
+
+    # 開発環境特有の設定
+    if Rails.env.development?
+      policy.connect_src :self, "ws://localhost:*", "ws://127.0.0.1:*"
+      policy.script_src :self, :unsafe_eval, :unsafe_inline
+      policy.style_src :self, :unsafe_inline
+    end
+  end
+
+  # Generate session nonces for permitted importmap and inline scripts
+  config.content_security_policy_nonce_generator = ->(request) { SecureRandom.base64(16) }
+  config.content_security_policy_nonce_directives = %w(style-src script-src)
+
+  # レポートモードを一時的に無効化して、実際のブロックを確認
+  config.content_security_policy_report_only = false
+end

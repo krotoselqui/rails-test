@@ -20,8 +20,8 @@ servers:
 proxy:
   # ssl: true
   # host: app.example.com
-  ssl: false
-  host: 133.242.236.103
+  ssl: true
+  host: aquaridz.com
 
 # Credentials for your image host.
 registry:
