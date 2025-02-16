@@ -25,8 +25,10 @@
     <div class="space-y-2">
       <div class="block text-sm font-medium text-gray-700">内容</div>
       <div class="mt-1 block w-full p-2 md border border-gray-300 bg-gray-50 min-h-[6rem]">
-        <div class="[&_p]:my-0 [&_p]:leading-normal">
-          <%= simple_format h(@firestoredata[:content]) %>
+        <div data-controller="text-animation" class="[&_p]:my-0 [&_p]:leading-normal">
+          <div data-text-animation-target="content" class="whitespace-pre-wrap">
+<%= h(@firestoredata[:content]).lstrip %>
+          </div>
         </div>
       </div>
     </div>
