@@ -50,4 +50,13 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Allow requests from any origin in test environment
+  config.action_controller.allow_forgery_protection = false
+
+  # Configure host for test environment
+  config.action_controller.default_url_options = { host: 'example.com', protocol: 'https' }
+
+  # Load test environment variables from .env.test
+  Dotenv.load('.env.test')
 end
