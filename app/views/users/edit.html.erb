@@ -52,22 +52,26 @@
       </div>
     </div>
 
-    <div class="border-t border-gray-200 pt-6 mb-6">
-      <h2 class="text-lg font-medium text-gray-900 mb-4">Googleアカウント連携</h2>
+    <div class="flex items-center justify-between pt-6">
+      <%= f.submit "更新する", class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out" %>
+      <%= link_to "戻る", root_path, class: "text-gray-600 hover:text-gray-900" %>
+    </div>
+  <% end %>
+
+  <div class="border-t border-gray-200 mt-6 pt-6">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Googleアカウント連携</h2>
+    <div class="<%= @user.google_token.present? ? 'bg-green-50 border-green-200 text-green-600' : 'bg-blue-50 border-blue-200 text-blue-600' %> border px-4 py-3 rounded relative mb-4">
       <% if @user.google_token.present? %>
-        <div class="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded relative mb-4">
-          <p>Googleアカウントと連携済みです</p>
-          <p class="text-sm mt-1">連携中のGoogleアカウント: <%= @user.google_email %></p>
-          <% if @user.google_drive_folder_id.present? %>
-            <p class="text-sm mt-1">フォルダID: <%= @user.google_drive_folder_id %></p>
-          <% else %>
-            <%= button_to setup_google_drive_user_path(@user), method: :post, class: "mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out" do %>
-              ドライブフォルダを作成する
-            <% end %>
-          <% end %>
-        </div>
+        <p>Googleアカウントと連携済みです</p>
+        <p class="text-sm mt-1">連携中のGoogleアカウント: <%= @user.google_email %></p>
+        <%= button_to unlink_google_path, method: :delete, class: "mt-3 inline-flex items-center px-4 py-2 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500", data: { confirm: "Googleアカウントの連携を解除してもよろしいですか？" } do %>
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          連携を解除する
+        <% end %>
       <% else %>
-        <%= link_to "/auth/google_oauth2", class: "inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
+        <%= link_to "/auth/google_oauth2", class: "inline-flex items-center" do %>
           <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
           </svg>
@@ -75,10 +79,5 @@
         <% end %>
       <% end %>
     </div>
-
-    <div class="flex items-center justify-between pt-6">
-      <%= f.submit "更新する", class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out" %>
-      <%= link_to "戻る", root_path, class: "text-gray-600 hover:text-gray-900" %>
-    </div>
-  <% end %>
+  </div>
 </div>

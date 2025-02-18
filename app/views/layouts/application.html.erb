@@ -49,14 +49,21 @@
                 </button>
 
                 <div 
-                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-700 hidden"
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-700 hidden z-50"
                   data-dropdown-target="menu"
                 >
                   <%= link_to 'プロフィール設定', edit_user_path(current_user), class: 'block px-4 py-2 text-sm hover:bg-gray-100' %>
+                  <% if current_user.google_token.present? && !current_user.google_drive_folder_id.present? %>
+                    <%= button_to 'Googleドライブフォルダを作成',
+                                setup_google_drive_user_path(current_user),
+                                method: :post,
+                                data: { turbo: false },
+                                class: 'w-full text-left px-4 py-2 text-sm hover:bg-gray-100' %>
+                  <% end %>
                   <div class="border-t border-gray-100"></div>
-                  <%= button_to 'ログアウト', 
-                              logout_path, 
-                              method: :delete, 
+                  <%= button_to 'ログアウト',
+                              logout_path,
+                              method: :delete,
                               class: 'w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100' %>
                 </div>
               </div>

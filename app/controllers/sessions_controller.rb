@@ -42,6 +42,20 @@ class SessionsController < ApplicationController
     redirect_to root_path
   end
 
+  def unlink_google
+    if current_user&.google_token
+      current_user.update!(
+        google_email: nil,
+        google_token: nil,
+        google_refresh_token: nil
+      )
+      flash[:notice] = 'Googleアカウントの連携を解除しました'
+    else
+      flash[:alert] = '連携が設定されていません'
+    end
+    redirect_to edit_user_path(current_user)
+  end
+
   private
 
   def update_google_credentials(user, auth)

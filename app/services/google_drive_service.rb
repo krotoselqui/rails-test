@@ -4,7 +4,8 @@ class GoogleDriveService
   def initialize(user)
     @user = user
     @drive = Google::Apis::DriveV3::DriveService.new
-    @drive.authorization = auth_client
+    @drive.authorization = authenticate_token
+    @drive.client_options.application_name = 'AquaRidz'
   end
 
   def create_folder(name)
@@ -33,7 +34,9 @@ class GoogleDriveService
 
   private
 
-  def auth_client
+  def authenticate_token
+    raise Google::Apis::AuthorizationError, 'トークンが設定されていません' if @user.google_token.blank?
+
     client = OAuth2::Client.new(
       ENV['GOOGLE_CLIENT_ID'],
       ENV['GOOGLE_CLIENT_SECRET'],
@@ -41,10 +44,42 @@ class GoogleDriveService
       token_url: 'https://oauth2.googleapis.com/token'
     )
 
-    OAuth2::AccessToken.new(
-      client,
-      @user.google_token,
-      refresh_token: @user.google_refresh_token
-    )
+    begin
+      credentials = Google::Auth::UserRefreshCredentials.new(
+        client_id: ENV['GOOGLE_CLIENT_ID'],
+        client_secret: ENV['GOOGLE_CLIENT_SECRET'],
+        scope: [
+          'https://www.googleapis.com/auth/drive.file',
+          'email',
+          'profile'
+        ],
+        access_token: @user.google_token,
+        refresh_token: @user.google_refresh_token,
+        expiration_time_millis: Time.current.to_i * 1000
+      )
+
+      if credentials.expired?
+        Rails.logger.info "トークンの有効期限が切れています。更新を試みます..."
+        begin
+          credentials.fetch_access_token!
+          @user.update!(
+            google_token: credentials.access_token,
+            google_refresh_token: credentials.refresh_token
+          )
+          Rails.logger.info "トークンを更新しました"
+        rescue Google::Apis::AuthorizationError => e
+          Rails.logger.error "トークン更新エラー: #{e.message}"
+          raise
+        end
+      end
+
+      credentials
+    rescue OAuth2::Error => e
+      Rails.logger.error "認証エラー: #{e.message}"
+      raise Google::Apis::AuthorizationError, "認証に失敗しました: #{e.message}"
+    rescue => e
+      Rails.logger.error "予期せぬエラー: #{e.message}"
+      raise Google::Apis::AuthorizationError, "認証処理でエラーが発生しました: #{e.message}"
+    end
   end
 end
