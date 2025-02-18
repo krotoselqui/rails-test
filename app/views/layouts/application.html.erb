@@ -31,11 +31,35 @@
           </div>
           <div class="flex items-center space-x-4">
             <% if user_signed_in? %>
-              <span class="text-gray-300"><%= current_user.email %></span>
-              <%= button_to 'ログアウト', 
-                          logout_path, 
-                          method: :delete, 
-                          class: 'bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition duration-150 ease-in-out' %>
+              <div class="relative" data-controller="dropdown">
+                <button 
+                  type="button" 
+                  class="flex items-center space-x-2 text-sm bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-md transition duration-150 ease-in-out"
+                  data-action="dropdown#toggleMenu"
+                >
+                  <% if current_user.icon.present? %>
+                    <div class="inline-block flex-shrink-0 w-4 h-4">
+                      <%= image_tag current_user.icon, class: "w-full h-full rounded-full object-cover" %>
+                    </div>
+                  <% end %>
+                  <span><%= current_user.username %></span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                <div 
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-700 hidden"
+                  data-dropdown-target="menu"
+                >
+                  <%= link_to 'プロフィール設定', edit_user_path(current_user), class: 'block px-4 py-2 text-sm hover:bg-gray-100' %>
+                  <div class="border-t border-gray-100"></div>
+                  <%= button_to 'ログアウト', 
+                              logout_path, 
+                              method: :delete, 
+                              class: 'w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100' %>
+                </div>
+              </div>
             <% else %>
               <%= link_to 'ログイン', 
                          login_path, 
