@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_07_053058) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_18_092521) do
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -22,6 +22,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_07_053058) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
+    t.string "icon"
+    t.text "profile"
     t.index ["email"], name: "index_users_on_email"
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 end
