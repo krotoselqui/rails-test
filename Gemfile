@@ -72,5 +72,6 @@ gem "google-cloud-firestore"
 gem "google-api-client"
 gem "google-auth-library-ruby"
 gem "omniauth-google-oauth2"
+gem "oauth2"
 
 gem "dotenv-rails", "~> 3.1"

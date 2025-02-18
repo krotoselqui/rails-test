@@ -543,6 +543,7 @@ DEPENDENCIES
   jbuilder
   kamal
   mysql2
+  oauth2
   omniauth-google-oauth2
   propshaft
   puma (>= 5.0)

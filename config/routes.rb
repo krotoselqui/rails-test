@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # OmniAuthのコールバックルート
+  get '/auth/google_oauth2/callback', to: 'sessions#google_oauth2_callback'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -16,7 +18,11 @@ Rails.application.routes.draw do
 
   # ユーザー関連のルート
   get '/signup', to: 'users#new', as: :signup
-  resources :users, except: [:index, :destroy, :new]
+  resources :users, except: [:index, :destroy, :new] do
+    member do
+      post 'setup_google_drive'
+    end
+  end
 
   # productsに関してCRUDアクションを定義する
   resources :products
