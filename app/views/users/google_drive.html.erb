@@ -68,8 +68,32 @@
                   <% @files.each do |file| %>
                     <tr class="hover:bg-gray-50">
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <%= file.name %>
-                      </td>
+                       <div class="flex items-center">
+                         <div class="file-preview-container">
+                           <% if file.mime_type&.start_with?('image/') && file.thumbnail_url %>
+                             <div class="file-thumbnail-wrapper">
+                               <%= image_tag file.thumbnail_url,
+                                     alt: file.name,
+                                     class: "file-thumbnail",
+                                     loading: "lazy" %>
+                             </div>
+                           <% elsif file.icon_link %>
+                             <div class="file-icon-wrapper">
+                               <%= image_tag file.icon_link,
+                                     alt: file.name,
+                                     class: "file-icon" %>
+                             </div>
+                           <% else %>
+                             <div class="file-icon-wrapper">
+                               <svg class="default-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                               </svg>
+                             </div>
+                           <% end %>
+                         </div>
+                         <span><%= file.name %></span>
+                       </div>
+                     </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <%= number_to_human_size(file.size.to_i) %>
                       </td>

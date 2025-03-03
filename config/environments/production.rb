@@ -20,7 +20,8 @@ Rails.application.configure do
 
   # ファイルアップロードのサイズ制限を設定
   config.action_dispatch.max_http_header_size = 50.megabytes
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  # X-Sendfileヘッダーを無効化（アセット配信にはパブリックファイルサーバーを使用）
+  config.action_dispatch.x_sendfile_header = nil
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.asset_host = "https://aquaridz.com"
@@ -31,6 +32,11 @@ Rails.application.configure do
     'Cache-Control' => "public, max-age=#{1.year.to_i}",
     'Access-Control-Allow-Origin' => '*',
     'X-Content-Type-Options' => 'nosniff'
+  }
+
+  # デフォルトヘッダーの設定
+  config.action_dispatch.default_headers = {
+    'X-Frame-Options' => 'ALLOWALL'
   }
 
   # アセットパイプラインの設定

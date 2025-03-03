@@ -5,7 +5,7 @@ OmniAuth.config.silence_get_warning = true
 Rails.application.config.middleware.use OmniAuth::Builder do
     provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],
              {
-               scope: 'email, profile, https://www.googleapis.com/auth/drive.file',
+               scope: 'email, profile, https://www.googleapis.com/auth/drive.file, https://www.googleapis.com/auth/drive.readonly',
                access_type: 'offline',
                prompt: 'consent',
                skip_jwt: true,

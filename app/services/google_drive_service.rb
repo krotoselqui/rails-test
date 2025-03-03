@@ -23,11 +23,19 @@ class GoogleDriveService
       query = "'#{folder_id}' in parents and trashed=false"
       response = @drive.list_files(
         q: query,
-        fields: 'files(id, name, mimeType, createdTime, modifiedTime, size)',
+        fields: 'files(id, name, mimeType, createdTime, modifiedTime, size, webContentLink, iconLink, hasThumbnail, thumbnailVersion)',
         order_by: 'modifiedTime desc',
         page_size: 100
       )
-      response.files || []
+      files = response.files || []
+      files.map do |file|
+        file.define_singleton_method(:thumbnail_url) do
+          if self.mime_type&.start_with?('image/')
+            web_content_link || "https://drive.google.com/thumbnail?id=#{self.id}&sz=s220"
+          end
+        end
+        file
+      end
     rescue Google::Apis::ClientError => e
       Rails.logger.error "Google Drive API error: #{e.message}"
       []
@@ -72,7 +80,9 @@ class GoogleDriveService
         client_id: ENV['GOOGLE_CLIENT_ID'],
         client_secret: ENV['GOOGLE_CLIENT_SECRET'],
         scope: [
+          'https://www.googleapis.com/auth/drive',
           'https://www.googleapis.com/auth/drive.file',
+          'https://www.googleapis.com/auth/drive.readonly',
           'email',
           'profile'
         ],
