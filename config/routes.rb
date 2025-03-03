@@ -21,7 +21,9 @@ Rails.application.routes.draw do
   get '/signup', to: 'users#new', as: :signup
   resources :users, except: [:index, :destroy, :new] do
     member do
-      post 'setup_google_drive'
+      get 'google_drive'
+      post 'create_google_drive_folder'
+      post 'upload_to_google_drive'
     end
   end
 

@@ -18,16 +18,39 @@ class GoogleDriveService
     file.id
   end
 
-  def upload_file(file_path, parent_folder_id)
+  def list_files(folder_id)
+    begin
+      query = "'#{folder_id}' in parents and trashed=false"
+      response = @drive.list_files(
+        q: query,
+        fields: 'files(id, name, mimeType, createdTime, modifiedTime, size)',
+        order_by: 'modifiedTime desc',
+        page_size: 100
+      )
+      response.files || []
+    rescue Google::Apis::ClientError => e
+      Rails.logger.error "Google Drive API error: #{e.message}"
+      []
+    end
+  end
+
+  def upload_file(file_path, parent_folder_id, original_filename = nil)
+    require 'marcel'
+
+    # ファイルの読み込みとMIMEタイプの検出
+    file = File.open(file_path)
+    content_type = Marcel::MimeType.for(file)
+    file.close
+
     file_metadata = {
-      name: File.basename(file_path),
+      name: original_filename || File.basename(file_path),
       parents: [parent_folder_id]
     }
 
     @drive.create_file(
       file_metadata,
       upload_source: file_path,
-      content_type: 'image/png',
+      content_type: content_type || 'application/octet-stream',
       fields: 'id'
     )
   end

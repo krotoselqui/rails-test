@@ -1,0 +1,79 @@
+@startuml
+skinparam class {
+  BackgroundColor White
+  ArrowColor Black
+  BorderColor Black
+}
+
+' Models
+class ApplicationRecord {
+}
+
+class User {
+  -email: string
+  -name: string
+  -google_oauth_token: string
+  -google_refresh_token: string
+  -google_email: string
+  +from_omniauth(auth)
+}
+
+
+' Controllers
+class ApplicationController {
+  #current_user
+  #logged_in?
+  #require_login
+}
+
+class UsersController {
+  +new()
+  +create()
+  +edit()
+  +update()
+  +google_drive()
+}
+
+class SessionsController {
+  +new()
+  +create()
+  +destroy()
+  +google_oauth2()
+}
+
+class FirestoreController {
+  +index()
+  +show()
+  +new()
+  +create()
+  +edit()
+  +update()
+  +destroy()
+}
+
+' Services
+class FirestoreService {
+  +initialize()
+  +create_document()
+  +read_document()
+  +update_document()
+  +delete_document()
+}
+
+class GoogleDriveService {
+  +initialize(user)
+  +list_files()
+  +upload_file()
+  +download_file()
+}
+
+' Relationships
+ApplicationRecord <|-- User
+ApplicationController <|-- UsersController
+ApplicationController <|-- SessionsController
+ApplicationController <|-- FirestoreController
+
+FirestoreController ..> FirestoreService : uses >
+UsersController ..> GoogleDriveService : uses >
+
+@enduml

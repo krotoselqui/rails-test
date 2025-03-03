@@ -1,0 +1,98 @@
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold mb-6">Googleドライブ管理</h1>
+
+  <div class="space-y-6">
+    <% unless @user.google_drive_folder_id %>
+      <div class="bg-blue-50 border border-blue-200 text-blue-600 px-4 py-3 rounded-lg">
+        <p class="mb-4">Googleドライブのフォルダを作成して、ファイルの管理を開始しましょう。</p>
+        <%= button_to create_google_drive_folder_user_path(@user),
+                    method: :post,
+                    class: "inline-flex items-center px-4 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          </svg>
+          フォルダを作成する
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @user.google_drive_folder_id %>
+      <div class="space-y-6">
+        <div class="border rounded-lg p-6 bg-gray-50">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">ファイルをアップロード</h2>
+        <%= form_with url: upload_to_google_drive_user_path(@user),
+                      method: :post,
+                      multipart: true,
+                      local: true,
+                      class: "space-y-4",
+                      data: {
+                        controller: "file-upload",
+                        file_upload_target: "form"
+                      } do |f| %>
+          <div>
+            <%= f.file_field :file,
+                           data: {
+                             file_upload_target: "fileInput",
+                             action: "change->file-upload#submitForm"
+                           },
+                           direct_upload: true,
+                           accept: "*/*",
+                           class: "hidden" %>
+            
+            <button type="button"
+                    data-action="click->file-upload#triggerFileInput"
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              ファイルを選択してアップロード
+            </button>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @files&.any? %>
+        <div class="border rounded-lg overflow-hidden">
+          <div class="bg-white">
+            <h3 class="text-lg font-medium text-gray-900 p-6 pb-0">アップロードされたファイル</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ファイル名</th>
+                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">サイズ</th>
+                    <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">更新日時</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <% @files.each do |file| %>
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <%= file.name %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <%= number_to_human_size(file.size.to_i) %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <%= l(file.modified_time&.to_time || Time.parse(file.modified_time), format: :long) rescue '-' %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="mt-4">
+      <%= link_to edit_user_path(@user), class: "inline-flex items-center text-gray-600 hover:text-gray-900" do %>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+        </svg>
+        プロフィール設定に戻る
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -73,5 +73,6 @@ gem "google-api-client"
 gem "google-auth-library-ruby"
 gem "omniauth-google-oauth2"
 gem "oauth2"
+gem "marcel", "~> 1.0"
 
 gem "dotenv-rails", "~> 3.1"

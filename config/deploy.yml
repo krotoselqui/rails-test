@@ -22,6 +22,8 @@ proxy:
   # host: app.example.com
   ssl: true
   host: aquaridz.com
+  files:
+    - config/nginx/production.conf:/etc/nginx/conf.d/custom.conf
 
 # Credentials for your image host.
 registry:

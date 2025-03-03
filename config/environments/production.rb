@@ -18,6 +18,10 @@ Rails.application.configure do
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
+  # ファイルアップロードのサイズ制限を設定
+  config.action_dispatch.max_http_header_size = 50.megabytes
+  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.asset_host = "https://aquaridz.com"
   
